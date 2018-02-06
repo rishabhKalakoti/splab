@@ -1,0 +1,92 @@
+     1                                  extern printf
+     2                                  extern atoi
+     3                                  
+     4                                  SECTION .data
+     5 00000000 57726F6E67206E6F20-     m1 db "Wrong no of input %d",10,0
+     6 00000009 6F6620696E70757420-
+     7 00000012 25640A00           
+     8                                  l1 equ $-m1
+     9 00000016 0A00                    lf db 10,0
+    10                                  SECTION .bss
+    11 00000000 <res 00000001>          i RESB 1
+    12 00000001 <res 00000001>          j RESB 1
+    13 00000002 <res 00000001>          n RESB 1
+    14                                  
+    15                                  SECTION .text
+    16                                  global _start
+    17                                  print:
+    18 00000000 52                      push    edx
+    19 00000001 51                      push    ecx
+    20 00000002 53                      push    ebx
+    21 00000003 50                      push    eax
+    22 00000004 E815000000              call    len
+    23 00000009 89C2                    mov     edx, eax
+    24 0000000B 58                      pop     eax
+    25 0000000C 89C1                    mov     ecx, eax
+    26 0000000E BB01000000              mov     ebx, 1
+    27 00000013 B804000000              mov     eax, 4
+    28 00000018 CD80                    int     80h
+    29 0000001A 5B                      pop     ebx
+    30 0000001B 59                      pop     ecx
+    31 0000001C 5A                      pop     edx
+    32 0000001D C3                      ret
+    33                                  
+    34                                  len:
+    35 0000001E 53                      push    ebx
+    36 0000001F 89C3                    mov     ebx, eax 
+    37                                  nextchar:
+    38 00000021 803800                  cmp     byte [eax], 0
+    39 00000024 7403                    jz      finished
+    40 00000026 40                      inc     eax
+    41 00000027 EBF8                    jmp     nextchar
+    42                                  
+    43                                  finished:
+    44 00000029 29D8                    sub     eax, ebx
+    45 0000002B 5B                      pop     ebx
+    46 0000002C C3                      ret
+    47                                  
+    48                                  iprint:
+    49 0000002D 50                      push    eax
+    50 0000002E 51                      push    ecx
+    51 0000002F 52                      push    edx
+    52 00000030 56                      push    esi
+    53 00000031 B900000000              mov     ecx, 0
+    54                                  
+    55                                  divideLoop:
+    56 00000036 41                      inc     ecx         
+    57 00000037 BA00000000              mov     edx, 0       
+    58 0000003C BE0A000000              mov     esi, 10       
+    59 00000041 F7FE                    idiv    esi       
+    60 00000043 83C230                  add     edx, 48    
+    61 00000046 52                      push    edx            
+    62 00000047 83F800                  cmp     eax, 0         
+    63 0000004A 75EA                    jnz     divideLoop    
+    64                                  printLoop:
+    65 0000004C 49                      dec     ecx             
+    66 0000004D 89E0                    mov     eax, esp       
+    67 0000004F E8ACFFFFFF              call    print      
+    68 00000054 58                      pop     eax          
+    69 00000055 83F900                  cmp     ecx, 0         
+    70 00000058 75F2                    jnz     printLoop       
+    71                                  
+    72 0000005A 5E                      pop     esi            
+    73 0000005B 5A                      pop     edx             
+    74 0000005C 59                      pop     ecx             
+    75 0000005D 58                      pop     eax             
+    76 0000005E C3                      ret
+    77                                  
+    78                                  _start:
+    79                                  
+    80 0000005F 59                      pop ecx
+    81 00000060 58                      pop eax
+    82 00000061 58                      pop eax
+    83 00000062 E899FFFFFF              call print
+    84 00000067 58                      pop eax
+    85 00000068 E893FFFFFF              call print
+    86 0000006D 58                      pop eax
+    87 0000006E E8(00000000)            call atoi
+    88                                  
+    89                                  exit:
+    90 00000073 B801000000              mov eax,1
+    91 00000078 BB00000000              mov ebx,0
+    92 0000007D CD80                    int 80h
