@@ -1,0 +1,15 @@
+SECTION .DATA
+msg db "hello world",10,0
+SECTION .TEXT
+mov ecx, msg
+mov eax,0
+mov ebx,1
+int 80h
+push eax
+push edx
+mov ecx,msg
+mov eax,0
+mov ebx,1
+int 80h
+pop edx
+pop eax

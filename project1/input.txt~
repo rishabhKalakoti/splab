@@ -1,0 +1,17 @@
+MC print
+mov eax,0
+mov ebx,1
+int 80h
+ME
+
+SECTION .DATA
+msg db "hello world",10,0
+SECTION .TEXT
+mov ecx, msg
+print
+push eax
+push edx
+mov ecx,msg
+print
+pop edx
+pop eax
